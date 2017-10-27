@@ -5,6 +5,6 @@
 
     "require": "require 'animateOnSpline'",
     "install": "animateOnSpline.coffee",
-    "example": "example.coffee",
+    "example": "example.coffee"
 
 }
