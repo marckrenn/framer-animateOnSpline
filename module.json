@@ -1,0 +1,10 @@
+{
+    "name": "animateOnSpline",
+    "description": "This module extends Framer's Layer-class so they they can be animated / translated along a Cubic Bézier Spline.",
+    "author": "Marc Krenn",
+
+    "require": "require 'animateOnSpline'",
+    "install": "animateOnSpline.coffee",
+    "example": "example.coffee",
+
+}
