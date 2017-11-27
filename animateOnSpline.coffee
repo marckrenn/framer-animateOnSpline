@@ -1,6 +1,8 @@
 
 
 Layer::animateOnSpline = (op = {}) ->
+	
+	children.destroy() for children in @childrenWithName(".splineProxy")
 
 	# Calculate point on spline
 	moveOnSpline = (p1, p2, p3, p4, t) ->
@@ -32,22 +34,27 @@ Layer::animateOnSpline = (op = {}) ->
 			pp.midX = point.midX
 			pp.midY = point.midY
 
-		# Re-start animation after Editor change 
-		unless op.modulate?
-			_splineProxy.x = op.from
-
-			_splineProxy.animate
-				x: op.to
-				options: op.animationOptions
-
 		# Write Editor points to console
 		points = {}
+
+		unless op.modulate?
+			_splineProxy.x = op.from
 
 		points.start = {midX: op.points.start.midX, midY: op.points.start.midY} unless op.points.start.isLayer?
 		points.controlPoint1 = {midX: op.points.controlPoint1.midX, midY: op.points.controlPoint1.midY} unless op.points.controlPoint1.isLayer?
 		points.controlPoint2 = {midX: op.points.controlPoint2.midX, midY: op.points.controlPoint2.midY} unless op.points.controlPoint2.isLayer?
 		points.end = {midX: op.points.end.midX, midY: op.points.end.midY} unless op.points.end.isLayer?
 		console.log(points)
+
+
+	animatePreview = =>
+
+		unless op.modulate?
+			_splineProxy.x = op.from
+
+			_splineProxy.animate
+				x: op.to
+				options: op.animationOptions
 
 
 	# Vars & Defaults
@@ -186,9 +193,15 @@ Layer::animateOnSpline = (op = {}) ->
 
 	unless op.points.start is this
 		op.points.start.onChange "point", -> updatePreview()
+
 	op.points.controlPoint1.onChange "point", -> updatePreview()
 	op.points.controlPoint2.onChange "point", -> updatePreview()
 	op.points.end.onChange "point", -> updatePreview()
+
+	op.points.start.onTouchEnd -> animatePreview()
+	op.points.controlPoint1.onTouchEnd -> animatePreview()
+	op.points.controlPoint2.onTouchEnd -> animatePreview()
+	op.points.end.onTouchEnd -> animatePreview()
 
 
 	unless op.editor
@@ -220,9 +233,9 @@ Layer::animateOnSpline = (op = {}) ->
 
 		_splineProxy = new Layer
 			parent: this
-			name: "."
+			name: ".splineProxy"
 			visible: false
-	
+
 		_splineProxy.animate
 			x: op.to
 			options: op.animationOptions
