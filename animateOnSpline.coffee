@@ -235,6 +235,10 @@ Layer::animateOnSpline = (op = {}) ->
 			parent: this
 			name: ".splineProxy"
 			visible: false
+		
+		_splineProxy.onAnimationStart => @emit(Events.AnimationStart)
+		_splineProxy.onAnimationStop => @emit(Events.AnimationStop)
+		_splineProxy.onAnimationEnd => @emit(Events.AnimationEnd)
 
 		_splineProxy.animate
 			x: op.to
